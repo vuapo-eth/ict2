@@ -1,7 +1,7 @@
 # Ict - Software Architecture
 
 ## Abstract
-This paper documents architectural design choices in regards to the implementation of Ict. It was written with the intent to be used as a reference for completely rewriting the current Java prototype (this repository) from scratch and utilizing the knowledge that was gained during the development of the first Ict iteration.
+This paper documents architectural design choices in regards to the implementation of Ict. It was written with the intent to be used as a reference for completely rewriting the [previous Java prototype](https://github.com/iotaledger/ict) from scratch and utilizing the knowledge that was gained during the development of the first Ict iteration.
 
 ## About Ict
 The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://github.com/iotaledger/iri), it is a light-weight node designed specifically for the Internet-of-Thing. It provides a basic gossip protocol which can be extended with various functionality through the IOTA eXtending Interface (IXI). This modular design enables the customization of the core node, allowing for all kinds of extensions to be plugged in. Ict nodes are intended to be used for a specific use cases in contrast to the IRI full node that provides general access to the Tangle while the applications are running remotely and connecting through the client libraries. Instead, the applications in Ict - the IXI modules - are working closely with the node and define how it behaves and which transactions it processes.
@@ -259,7 +259,7 @@ Due to the modularity and for performance reasons many components are running in
 
 
 ## Properties
-*We will need some variables that can be adjusted/configured by the user. For example, the user should be able to change the neighbors. For that it makes sense to implement a properties class that keeps track of all variables. I recommend designing this class with scalability in mind from the beginning as if it would have to handle hundreds of variables. This will make sure that new variables can be added, changed or removed with a single line instead of having to change the source code in 10 different places - as it is necessary in the current Java implementation.*
+*We will need some variables that can be adjusted/configured by the user. For example, the user should be able to change the neighbors. For that it makes sense to implement a properties class that keeps track of all variables. I recommend designing this class with scalability in mind from the beginning as if it would have to handle hundreds of variables. This will make sure that new variables can be added, changed or removed with a single line instead of having to change the source code in 10 different places - as is necessary in the Java prototype.*
 
 The user should be able to update the properties during runtime (e.g. from the GUI) without having to restart the node. To allow that a PropertiesUser interface can be used. This interface would specify a function `updateProperties(Properties properties)` that is evoked in the top level class (should be Ict) when the properties change. Each class that works with configurable variables or contains components that do, would implement that interface and update its internal variables based on the new properties object or delegate the changed properties to the respective sub-component.
 
