@@ -91,7 +91,22 @@ Please note that it is not guaranteed that you receive parents before children. 
 
 ## The IXI (IOTA eXtending Interface)
 
+### Background
+
+For Ict to meet the demands of the Internet of Things, its architecture must be very minimalist and modular. Due to these reasons, Ict provides the Iota eXtending Interface (IXI) - a central component which allows installation of custom applications/plugins (IXI Modules) - depending on the needs. This allows the basic gossip protocol of Ict to be extended by various functionality.
+
 *The Ict component organizes the node by bundling and connecting all components together. It also provides the IXI (Iota eXtending Interface) - the interface used for applications/plugins (IXI Modules) to communicate with the Tangle. The IXI is a central component of Ict that enables a high grade of modularity and allows to extend the node with custom functionality through IXI modules. Therefore the design of IXI is critical. IXI abstracts from the operational side of the node (neighbors, configurations, etc.) and provides only a minimal interface to “talk to” the tangle without seeing the inner workings of Ict.*
+
+Illustration of an Ict node with two installed modules:
+
+![](https://raw.githubusercontent.com/mikrohash/ict2/master/images/modules.png?token=ACY7L3ITCTNDJ63QYD6AC4S4ZVK2Q)
+
+###The power of modules
+
+It's very important to understand what power a module has.
+Since modules extend the Ict core, they see the same Tangle. They could, however, look at the same Tangle from a different perspective and follow its own specific set of rules (e.g. following specific milestones).
+
+The power lies in when many nodes have the same module installed. All these modules view the Tangle from the same perspective and could follow their own consensus rules. 
 
 ### Transaction Related Functionality
 
