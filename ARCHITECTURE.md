@@ -18,6 +18,19 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 *An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. UDP is used to transact messages of fixed length. Each such message consists of a transaction and the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with the requested transaction in the transaction part of the message.*
 
+### UDP vs TCP
+
+The implementation will start with TCP because:
+* There are usecases where TCP is necessary. For example, a car driving through a hostile neighborhood should be able to connect to reliable nodes over long distance.
+* TCP is much easier to implement for the beginning.
+* Research suggests that "TCP is more reliable and better than UDP  in terms of all the performance measures." ([source](https://www.researchgate.net/publication/329591640_Performance_Comparison_between_TCP_and_UDP_Protocols_in_Different_Simulation_Scenarios))
+
+We will keep the interface between the core logic and the communication component as abstract as possible. This enables us to leave the decision open on whether or not UDP should be implemented as well. Architectural design choices should be postponed as much as possible, otherwise there is a risk of overplanning that would require changes of major components in retrospect.
+
+If it is decided to add UDP support for constrained devices, we might offer two pre-compile options:
+* only UDP for constrained devices
+* TCP+UDP for unconstrained devices
+
 ### Neighbors
 Instances of the Neighbor class model our neighboring nodes. In order to evaluate the quality of each neighbor, we count the amount of transactions we received from each node in a separate stats object. We regularly archive this Stats object and replace it with a new Stats instance starting all counts at zero. This happens after each round (a user defined time interval). The round duration is specified in the properties.
 
