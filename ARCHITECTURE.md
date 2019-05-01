@@ -23,6 +23,7 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 The implementation will start with TCP because:
 * There are usecases where TCP is necessary. For example, a car driving through a hostile neighborhood should be able to connect to reliable nodes over long distance.
 * TCP is much easier to implement for the beginning.
+* Some ISPs drop UDP packets deterministically when they exceed a certain MTU size ~1500 bytes (IOTA transactions have a byte size of 1836). However, this could be solved by using a custom fragmentation protocol on top of UDP.
 * Research suggests that "TCP is more reliable and better than UDP  in terms of all the performance measures." ([source](https://www.researchgate.net/publication/329591640_Performance_Comparison_between_TCP_and_UDP_Protocols_in_Different_Simulation_Scenarios))
 
 We will keep the interface between the core logic and the communication component as abstract as possible. This enables us to leave the decision open on whether or not UDP should be implemented as well. Architectural design choices should be postponed as much as possible, otherwise there is a risk of overplanning that would require changes of major components in retrospect.
@@ -37,13 +38,13 @@ Instances of the Neighbor class model our neighboring nodes. In order to evaluat
 Each stats instances tracks the following integer values:
 
 
-Name | Increased for every incoming packet that... | Ideally
--- | -- | --
-`txsOld` | contains a transaction that is neither invalid nor ignored but has already been received before. | low
-`txsNew` | contains a transaction that is neither invalid nor ignored and new to us. | high
-`txsRequested` | contains a transaction request we are going to answer. | low
-`txsInvalid` | cannot be decoded to a valid transaction (missing proof-of-work). | very low
-`txsIgnored` | we ignore (spam protection or unexpected timestamp, see Persistence) | low
+| Name           | Increased for every incoming packet that...                                                      | Ideally  |
+| -------------- | ------------------------------------------------------------------------------------------------ | -------- |
+| `txsOld`       | contains a transaction that is neither invalid nor ignored but has already been received before. | low      |
+| `txsNew`       | contains a transaction that is neither invalid nor ignored and new to us.                        | high     |
+| `txsRequested` | contains a transaction request we are going to answer.                                           | low      |
+| `txsInvalid`   | cannot be decoded to a valid transaction (missing proof-of-work).                                | very low |
+| `txsIgnored`   | we ignore (spam protection or unexpected timestamp, see Persistence)                             | low      |
 
 In order to identify the origin of incoming traffic, each Neighbor provides a `isOriginOf()` function that allows the Receiver to determine whether a certain packet did originate from that neighbor. Note that the port cannot always be resolved in which case the IP should provide a fallback ([issue #3](https://github.com/iotaledger/ict/issues/3)).
 
@@ -123,20 +124,20 @@ The power lies in when many nodes have the same module installed. All these modu
 
 ### Transaction Related Functionality
 
-IXI Function | Description
---- | ---
-findTransactionByHash(hash) | Returns the transaction with the specific hash from the local tangle.
-findTransactionsByAddress(address) |Returns all transactions with the specific address.
-findTransactionByTag(tag) | Returns all transactions with the specific tag.
-submit(transaction) | Adds a new transaction to the local tangle and broadcasts it to the network. You might project this function to EEE (see Receiver).
+| IXI Function                       | Description                                                                                                                         |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| findTransactionByHash(hash)        | Returns the transaction with the specific hash from the local tangle.                                                               |
+| findTransactionsByAddress(address) | Returns all transactions with the specific address.                                                                                 |
+| findTransactionByTag(tag)          | Returns all transactions with the specific tag.                                                                                     |
+| submit(transaction)                | Adds a new transaction to the local tangle and broadcasts it to the network. You might project this function to EEE (see Receiver). |
 
 ### EEE Related Functionality
 
-IXI Function | Description
---- | ---
-addListener(effectListener) | Registers an effect listener (see EEE) that will be notified about new effects submitted to its environment.
-removeListener(effectListener) | Unregisters a previously registered effect listener.
-submitEffect(environment, effect) | Submits an effect to a certain environment by notifying every registered listener of that environment about the effect.
+| IXI Function                      | Description                                                                                                             |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| addListener(effectListener)       | Registers an effect listener (see EEE) that will be notified about new effects submitted to its environment.            |
+| removeListener(effectListener)    | Unregisters a previously registered effect listener.                                                                    |
+| submitEffect(environment, effect) | Submits an effect to a certain environment by notifying every registered listener of that environment about the effect. |
 
 # Logic and Utils
 ## Trytes
