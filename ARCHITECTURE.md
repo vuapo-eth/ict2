@@ -18,6 +18,24 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 *An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. UDP is used to transact messages of fixed length. Each such message consists of a transaction and the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with the requested transaction in the transaction part of the message.*
 
+### Communication Qualities
+
+#### Guaranteed Delivery
+
+Unnecessary. The DAG structure of the Tangle provides data integrity and allows to identify missing transactions. Requesting should happen on a higher layer controlled by IXI modules.
+
+#### Sequence / In Order Delivery
+
+Unnecessary. It doesn't matter in which sequence transactions are received.
+
+#### Congestion and Flow Control
+
+Not sure. Depends on how the node would react in case of congestion. If it would simply result in the loss of packages beyond the capacity, there would be no difference for the receiver. In this case flow control might still help to reduce the resources on the submitter side.
+
+#### Package Partitioning
+
+Highly desirable. Too large package size is the main reason why UDP could become a problem.
+
 ### UDP vs TCP
 
 The implementation will start with TCP because:
