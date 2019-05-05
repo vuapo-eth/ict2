@@ -20,21 +20,43 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 ### Communication Qualities
 
+This section evaluates which communication protocol qualities are desired for use in Ict. A protocol candidate should cover all required qualities but no unnecessary to reduce overhead.
+
 #### Guaranteed Delivery
 
 Unnecessary. The DAG structure of the Tangle provides data integrity and allows to identify missing transactions. Requesting should happen on a higher layer controlled by IXI modules.
 
 #### Sequence / In Order Delivery
 
-Unnecessary. It doesn't matter in which sequence transactions are received.
+Unnecessary. It doesn't matter in which sequence transaction gossip is received.
 
+#### IP Fragmentation
+
+Required. Although it should be avoided whenever possible due to overhead, it will be required in some cases. Packet size is limited by MTU and too large packets might not be supported especially by constrained devices. Despite the potential use of compression, the protocol must be able to transmit even in worst-case in which no compression is possible.
+
+#### Error Detection
+
+Useful. Incorrect bytes will result in invalid transactions in the application layer. However, without an additional error detection mechanism in the communication layer, we will only be able to detect the error after decoding and hashing a transaction. If their is a considerable error probability, this would result in performance issues. It's not necessary that the protocol provides an integrated error detection mechanism since we could simply implement a byte checksum on top.
+
+#### Error Correction
+
+Not worth it. Error correction comes with significant overhead due to the amount of redundancy required. For bandwidth reasons we will avoid this. Transaction delivery is not guaranteed anyways, therefore it is not necessary to receive every packet correctly. An incorrect packet could simply be ignored. Additionally, we expect a very low error rate.
+
+#### Latency
+
+Unnecessary. The Tangle is partition tolerant. It is not required that a transaction is broadcasted to the entire network immediately.
+
+#### Low Bandwidth Requirements
+
+Required. Bandwidth requirements directly influence the maximum TPS supported by the network. Bandwidth, memory and CPU are expected to be the limiting resources.
+ 
 #### Congestion and Flow Control
 
 Not sure. Depends on how the node would react in case of congestion. If it would simply result in the loss of packages beyond the capacity, there would be no difference for the receiver. In this case flow control might still help to reduce the resources on the submitter side.
 
-#### Package Partitioning
+#### Encryption
 
-Highly desirable. Too large package size is the main reason why UDP could become a problem.
+#### Authentication
 
 ### UDP vs TCP
 
