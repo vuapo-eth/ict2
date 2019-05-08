@@ -16,9 +16,9 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 <img src="https://raw.githubusercontent.com/iotaledger/ict/master/docs/assets/network.png" />
 
-*An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. Some protocol (not y) will be used to transact messages of fixed length. Each such message consists of a transaction and the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with the requested transaction in the transaction part of the message.*
+*An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. Some protocol (not yet decided) will be used to transact messages. Each such message consists of a transaction and/or (undecided, will depend on protocol) the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with a new message containing the requested transaction.*
 
-### Communication Qualities
+### Communication Protocol Qualities
 
 This section evaluates which communication protocol qualities are desired for use in Ict. A protocol candidate should cover all required qualities but no unnecessary to reduce overhead.
 
@@ -346,5 +346,5 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4NjQwMjEyNzRdfQ==
+eyJoaXN0b3J5IjpbMTUxNjI2NzY3XX0=
 -->
