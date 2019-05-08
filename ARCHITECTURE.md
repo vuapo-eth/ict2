@@ -20,7 +20,7 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 ### Communication Protocol Qualities
 
-This section evaluates which communication protocol qualities are desired for use in Ict. A protocol candidate should cover all required qualities but no unnecessary to reduce overhead.
+This section evaluates which communication protocol qualities are desired for use in Ict. A protocol candidate should cover all required qualities but not include other features to reduce overhead.
 
 #### Guaranteed Delivery
 
@@ -55,6 +55,8 @@ Required. Bandwidth requirements directly influence the maximum TPS supported by
 Not sure. Depends on how the node would react in case of congestion. If it would simply result in the loss of packages beyond the capacity, there would be no difference for the receiver. In this case flow control might still help to reduce the resources on the submitter side.
 
 #### Encryption
+
+Optional. Encryption causes some CPU and potentially bandwidth overhead. 
 
 #### Authentication
 
@@ -346,5 +348,5 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTUxNjI2NzY3XX0=
+eyJoaXN0b3J5IjpbMTkzMzA2NzA4Ml19
 -->
