@@ -56,7 +56,7 @@ Not sure. Depends on how the node would react in case of congestion. If it would
 
 #### Encryption
 
-Optional. Encryption causes some CPU and potentially bandwidth overhead. Some nodes might not see any use in encryption while in other instances encryption might be very useful to hide the origin of a transaction that could otherwise be traced back by any node monitoring the not encrypted network activity. The latter is neceenable pseudonymity on the
+Optional. Encryption causes some CPU and potentially bandwidth overhead. Some nodes might not see any use in encryption while in other instances encryption might be very useful to hide the origin of a transaction that could otherwise be traced back by any node monitoring the not encrypted network activity. Nodes used to submit funds associated with user addresses running on less constrained devices should enable encryption to  pseudonymity on the
 
 #### Authentication
 
@@ -348,5 +348,5 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTI0NzQ5NTIyNF19
+eyJoaXN0b3J5IjpbMTE5MzQ1MjEzM119
 -->
