@@ -276,6 +276,8 @@ Ict should only work with complete bundles. Incomplete bundles shouldn’t reach
 
 *Due to the modularity and event-based nature of Ict, a standardized communication infrastructure can help to improve the overall design. EEE (Environment Entity Effect) provides such a mechanism. It is mainly used for two purposes: to allow IXI modules to communicate with each other (inter-ixi communication) and to notify components (IXI modules and native components such as the Sender) about newly received transactions. A general description of EEE as well as its appliance to inter-ixi communication can be found [here](https://github.com/iotaledger/ixi/blob/master/docs/inter-ixi.md). The advantage of EEE is that it offers a streamlined mechanism where no entity must be aware of the location of the other entity. Neither the language the other entity is written in, nor the path nor whether that entity is on the local device or the other side of a socket is relevant to communicate.*
 
+<img src="https://raw.githubusercontent.com/iotaledger/ict/master/docs/assets/eee_diagram.png" height="300px" />
+
 ### Gossip
 
 <img src="https://raw.githubusercontent.com/iotaledger/ict/master/docs/assets/gossipcycle.png" />
@@ -292,6 +294,8 @@ Gossip preprocessors offer a conveyor like mechanism for gossip events. Gossip p
 Other than in the current implementation I advise against modifying EEE to enable this additional functionality. Instead, the chain architecture should be realized on top of EEE. This can happen through a specific environment (e.g. `GP_manager`) where listeners can register their position. A supervising listener listens to that environment and keeps track of every gossip preprocessor that has registered itself. New gossip events are inserted into a starting environment (e.g. `GP_start`), from where the supervisor forwards them to the first gossip preprocessor. Each preprocessor provides a numeric position so that they can be ordered. If the lowest registered position is -1337, the supervisor would forward the gossip event to the preprocessors environment (e.g. `GP_input#-1337`). That preprocessor can then post its output to an output environment (e.g. `GP_output#-1337`) from where it’s picked up by the supervisor again to be forwarded to the next preprocessor until the event reaches the end of the chain which would be the input for the gossip listeners.
 
 A smarter approach could reduce the amount of necessary environments by bundling all input and output environments into single environments which are used by all preprocessors simultaneously. The current position would be encoded in the effect and only the preprocessor responsible for the current position would process the respective event. It’s even possible to combine them all into a single environment. I leave it open to decide on how to realize this technically. However, if designed properly, no module programmer should have to be aware about the technical translation to EEE.
+
+<img src="https://raw.githubusercontent.com/iotaledger/ict/master/docs/assets/gpp_with_eee.png" />
 
 ### Virtual Functions
 In some use cases - especially for inter ixi communication - it is necessary to call functions via EEE. Virtual function calls can be implemented on top of EEE (see [here](https://github.com/iotaledger/ixi/blob/master/docs/inter-ixi.md#virtual-function-calls)). This allows IXI modules to publicly offer their functionality in a service oriented fashion, enabling inter-ixi dependencies while maintaining a high grade of modularity.
