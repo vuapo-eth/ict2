@@ -345,3 +345,6 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
+<!--stackedit_data:
+eyJoaXN0b3J5IjpbLTE4MDQyNjgyNjhdfQ==
+-->
