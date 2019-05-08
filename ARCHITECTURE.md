@@ -1,7 +1,7 @@
 # Ict - Software Architecture
 
 ## Abstract
-This paper documents architectural design choices in regards to the implementation of Ict. It was written with the intent to be used as a reference for completely rewriting the [previous Java prototype](https://github.com/iotaledger/ict) from scratch and utilizing the knowledge that was gained during the development of the first Ict iteration.
+This paper documents architectural design choices in regards to Ict on an abstract language-independent level. It was written with the intent to be used as a reference for completely rewriting the [previous Java prototype](https://github.com/iotaledger/ict) from scratch and utilizing the knowledge that was gained during the development of the first Ict iteration.
 
 ## About Ict
 The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://github.com/iotaledger/iri), it is a light-weight node designed specifically for the Internet-of-Things. It provides a basic gossip protocol which can be extended with various functionality through the IOTA eXtending Interface (IXI). This modular design enables the customization of the core node, allowing for all kinds of extensions to be plugged in. Ict nodes are intended to be used for specific use cases in contrast to the IRI full node that provides general access to the Tangle while the applications are running remotely and connecting through the client libraries. Instead, the applications in Ict - the IXI modules - are working closely with the node and define how it behaves and which transactions it processes.
@@ -16,7 +16,7 @@ The Iota Controlled agenT (Ict) is an IOTA node. In contrast to [IRI](https://gi
 
 <img src="https://raw.githubusercontent.com/iotaledger/ict/master/docs/assets/network.png" />
 
-*An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. UDP is used to transact messages of fixed length. Each such message consists of a transaction and the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with the requested transaction in the transaction part of the message.*
+*An Ict node is deployed on some kind of server, usually a VPS or a raspberry PI. Each Ict node is ideally connected to three other Ict nodes (the neighbors) usually over the Internet. The Node component acts as interface to the network and is responsible for the communication with neighbors. The communication is limited to transaction gossip. Some protocol (not y) will be used to transact messages of fixed length. Each such message consists of a transaction and the hash of any other transaction the sending node is requesting. Neighbors answer these requests by responding with the requested transaction in the transaction part of the message.*
 
 ### Communication Qualities
 
@@ -346,5 +346,5 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE4MDQyNjgyNjhdfQ==
+eyJoaXN0b3J5IjpbLTE4NjQwMjEyNzRdfQ==
 -->
