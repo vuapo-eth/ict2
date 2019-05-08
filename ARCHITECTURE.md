@@ -56,7 +56,7 @@ Not sure. Depends on how the node would react in case of congestion. If it would
 
 #### Encryption
 
-Optional. Encryption causes some CPU and potentially bandwidth overhead. 
+Optional. Encryption causes some CPU and potentially bandwidth overhead. Some nodes might not see any use in encryption while in other instances encryption might be very useful to hide the origin of a transaction that could otherwise be traced back by any node 
 
 #### Authentication
 
@@ -348,5 +348,5 @@ To improve the user experience, Ict utilizes metadata provided by IXI modules in
 ### The `versions.json` File
 Currently modules must provide an additional `versions.json` file that specifies which module version to download from GitHub based on the Ict version but it might make sense to combine both into a single artifact. Because this file is version overlapping, it should not be downloaded but looked up in the repository.
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTkzMzA2NzA4Ml19
+eyJoaXN0b3J5IjpbLTk1NTg4OTI4OF19
 -->
