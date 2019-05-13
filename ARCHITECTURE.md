@@ -62,7 +62,7 @@ Optional. Encryption causes some CPU and potentially bandwidth overhead. Some no
 
 ### UDP vs TCP
 
-The implementation will start with TCP because:
+TCP is prefered over UDP because:
 * There are usecases where TCP is necessary. For example, a car driving through a hostile neighborhood should be able to connect to reliable nodes over long distance.
 * TCP is much easier to implement for the beginning.
 * Some ISPs drop UDP packets deterministically when they exceed a certain MTU size ~1500 bytes (IOTA transactions have a byte size of 1836). However, this could be solved by using a custom fragmentation protocol on top of UDP.
@@ -73,6 +73,16 @@ We will keep the interface between the core logic and the communication componen
 If it is decided to add UDP support for constrained devices, we might offer two pre-compile options:
 * only UDP for constrained devices
 * TCP+UDP for unconstrained devices
+
+### QUIC vs TCP
+
+Ict will use QUIC as transport protocol for gossip. Issues in TCP that QUIC solves:
+ * head-of-line blocking
+ * poor security
+ * slow handshakes
+ * inefficient congestion control
+ 
+Additionally, QUIC provides stream multiplexing which can be used for packet partitioning.
 
 ### Neighbors
 Instances of the Neighbor class model our neighboring nodes. In order to evaluate the quality of each neighbor, we count the amount of transactions we received from each node in a separate stats object. We regularly archive this Stats object and replace it with a new Stats instance starting all counts at zero. This happens after each round (a user defined time interval). The round duration is specified in the properties.
