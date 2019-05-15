@@ -246,7 +246,7 @@ The first 3 trits of a transaction hash are used as flag trits. They are generat
 
 #### Flag Trit #0
 
-The first trit of the transaction hash signals the *transaction type* (`-`, `0` or `1`). The type expresses which fields of a transaction are interesting. For example, the `SignatureOrMessage` field of an output transaction does not change the ledger and can be ignored if the data itself is not subjectively important to the receiver. As denoted by the right column in the transaction structure image, there are three parts of a transaction:
+The first trit of the transaction hash signals the *transaction type* (`-`, `0` or `1`). The type expresses which fields of a transaction are interesting and which must not necessarily be forwarded to / requested from neighbors. For example, the `SignatureOrMessage` field of an output transaction does not change the ledger and can be ignored if the data itself is not subjectively important to the receiver. As denoted by the right column in the transaction structure image, there are three parts of a transaction:
 
 \# | NAME | Fields | POS (LENGTH) | USAGE
 -- | -- | -- | -- | --
@@ -256,7 +256,7 @@ The first trit of the transaction hash signals the *transaction type* (`-`, `0` 
 
 The `0` transaction type marks the first two parts as unimportant. Type `1` denotes the first part as unimportant. Type `-` specifies that all parts are important. If the `SignatureOrMessage` contains a signature, the type is `-`.
 
-To allow a node to reconstruct the hash of the transaction despite knowing all trytes, transactions of types `0` and `1` are gossipped together with the inner state of the sponge function (162 trytes) which has already absorbed the missing trytes. This partial hash can then be finished by the receiver despite not having access to all fields.
+To allow a node to reconstruct the hash of the transaction despite not knowing all trytes, transactions of types `0` and `1` are gossipped together with the inner state of the sponge function (162 trytes) which has already absorbed the missing trytes. This partial hash can then be finished by the receiver despite not having access to all fields.
 
 #### Flag Trits #1 and #2
 
