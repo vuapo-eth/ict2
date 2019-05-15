@@ -258,6 +258,12 @@ The `0` transaction type marks the first two parts as unimportant. Type `1` deno
 
 To allow a node to reconstruct the hash of the transaction despite not knowing all trytes, transactions of types `0` and `1` are gossipped together with the inner state of the sponge function (162 trytes) which has already absorbed the missing trytes. This partial hash can then be finished by the receiver despite not having access to all fields.
 
+TYPE | PARTS | TRANSACTIONS | USAGE
+-- | -- | -- | --
+`-` | 1, 2, 3 | inputs | signature verification for ledger validation
+`1` | 2, 3 | outputs and inputs validated by actors | ledger changes and balances
+`0` | 3 | zero-value and confirmed transactions | tangle structure, consensus
+
 #### Flag Trits #1 and #2
 
 These trits are used to mark the beginning and end of a bundle (see [Bundle](#bundle)). Flag trit #1 marks te bundle head. Flag trit #2 the bundle tail.
