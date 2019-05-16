@@ -101,8 +101,31 @@ Each stats instances tracks the following integer values:
 In order to identify the origin of incoming traffic, each Neighbor provides a `isOriginOf()` function that allows the Receiver to determine whether a certain packet did originate from that neighbor. Note that the port cannot always be resolved in which case the IP should provide a fallback ([issue #3](https://github.com/iotaledger/ict/issues/3)).
 
 
-### Message
-There is only one object being transferred between nodes: the message. Each message is represented through bytes and encodes two parts: the trytes of a transaction to forward and the transaction hash of another transaction to request. The first part is used to transfer transactions between nodes (either active forwarding of new received transactions or to answer custom transaction requests). The second part is used to request transactions. If there are no transactions to request, this field is set to NULL (all trytes filled with `9`s). Requests are not forwarded.
+### Messages
+There are several types of messages that can be transferred. Stream multiplexing will allow to identify the message type to interpret the packet correctly.
+
+#### Handshake
+
+As soon as the connection is established, nodes do a handshake. During this process, they exchange information about each other such as but not limited to:
+* node version
+* supported transmission protocols
+* supported compression algorithms
+* current load (cpu, bandwidth, memory, ...)
+* …
+
+Based on that information the nodes then negotiate on intend to communicate. The exact handshake mechanism is yet to be designed. The handshake is regulariliy repeated to adjust to potential changes.
+
+#### Gossip Forwarding
+
+If a node receives or sends a transaction, it forwards that transaction to neighbors not knowing that transaction yet. This is done with a gossip message which contains the trytes of the transaction but usually not the hash. If nodes trust each other, they could negotiate during the handshake to share hashes with each other in order to reduce CPU cycles.
+
+A node forwards as many trytes of a transaction as it knows (see [Flag Trit #0](#flag-trit-0)). If possible all trytes. If the `signatureOrMessage` field is unknown, it only forwards the other trytes. If neither the `signatureOrMessage` field nor the transaction essence is known, only the third part is forwarded. In both of these last two cases the inner state of the sponge function is submitted as well so that the receiver can recalculate the hashes despite not knowing all trytes.
+
+#### Gossip Requests
+
+Sometimes nodes might want to request specific transactions. For that purpose, they can submit request messages. These request messages only contain the hash(es) of the transaction(s) requested. Since it does not make sense to send very small packages due to the overhead, requests should if possible be attached to forwarding messages. A separate request message should only be sent if there is no transaction to forward or there are enough requests to sufficiently fill a packet. To use the bandwidth more efficiently, sending the entire 81 tryte hash should be avoided. The first 27 trytes for example should be sufficient to request any specific transaction.
+
+For every requested transaction, an additional trit is required to specify which parts of the transaction the requester is interested in (see [Flag Trit #0](#flag-trit-0)). If that trit is set to `-`, all trytes are submitted. If set to `1` (or `0`) only part 2 and 3 (or only part 3) are submitted together with the inner state of the sponge function (162 trytes) so that the receiver can recalculate the hashes despite not knowing all trytes.
 
 ### Sender
 The Sender is responsible for broadcasting transactions to neighbors and responding to requests. To avoid redundant gossip, it does not forward transactions to neighbors from which these transactions were originally received.
@@ -261,8 +284,10 @@ To allow a node to reconstruct the hash of the transaction despite not knowing a
 TYPE | PARTS | TRANSACTIONS | USAGE
 -- | -- | -- | --
 `-` | 1, 2, 3 | inputs | signature verification for ledger validation
-`1` | 2, 3 | outputs and inputs validated by actors | ledger changes and balances
-`0` | 3 | zero-value and confirmed transactions | tangle structure, consensus
+`1` | 2, 3 | outputs | ledger changes and balances
+`0` | 3 | zero-value bundles | tangle topology
+
+Inputs of type `1`or `0` are **invalid**, just like outputs of type `-` or `0` or zero-value bundles of type `-` or `1`.
 
 #### Flag Trits #1 and #2
 
