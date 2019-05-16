@@ -177,6 +177,7 @@ Rather than doing so in the transaction objects themselves - as it is done in th
 
 Please note that it is not guaranteed that you receive parents before children. Therefore make sure that all edges are added in retrospect once the second transaction (parent or child) is received.
 
+**Source code for the Vertex class and a minimal Tangle class that creates the edges can be found in the code/ directory.**
 
 ## The IXI (IOTA eXtending Interface)
 
